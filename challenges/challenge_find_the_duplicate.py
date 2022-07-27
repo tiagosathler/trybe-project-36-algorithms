@@ -17,6 +17,7 @@ def find_duplicate(nums: list):
             se a lista é vazia
             ou se seus itens não são inteiros
             ou se seus itens não inteiros positivos
+            ou se não há número em duplicidade
 
         int: o primeiro número inteiro encontrado em duplicidade
     """
