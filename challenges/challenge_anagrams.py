@@ -1,6 +1,6 @@
 def merge_sort(
-        first_list: list[str],
-        second_list: list[str],
+        first_list: list,
+        second_list: list,
         start: int,
         end: int) -> None:
     """
@@ -36,7 +36,7 @@ def merge_sort(
 
 
 def comparisons(
-                current_list: list[str],
+                current_list: list,
                 left_part: str,
                 right_part: str,
                 index: int,
@@ -103,8 +103,8 @@ def comparisons(
 
 
 def merge(
-        first_list: list[str],
-        second_list: list[str],
+        first_list: list,
+        second_list: list,
         start: int,
         mid: int,
         end: int) -> None:

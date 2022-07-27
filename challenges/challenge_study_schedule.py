@@ -1,4 +1,4 @@
-def study_schedule(permanence_period: list[tuple], target_time: int) -> int:
+def study_schedule(permanence_period: list, target_time: int) -> int:
     """
     Analisa a quantidade de estudantes que estudam durante o horário alvo
     utilizando um algoritmo de força bruta com complexidade de O(n)
