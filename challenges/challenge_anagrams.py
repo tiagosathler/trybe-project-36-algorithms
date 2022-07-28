@@ -1,20 +1,13 @@
-def merge_sort(
-        first_list: list,
-        second_list: list,
-        start: int,
-        end: int) -> None:
+def quick_sort(current: list, start: int, end: int) -> None:
     """
-    Ordena em ordem alfabética duas listas de strings de mesmo tamanho
-    de forma recursiva. Método 'merge sort' (divisão e conquista)
+    Ordena em ordem alfabética uma lista de strings de forma recursiva.
+    Método 'quick sort' (divisão e conquista)
 
     Entradas:
     ---------
 
-    first_list : list[str]
-        primeira lista de strings
-
-    second_list : list[str]
-        segunda lista de strings
+    current : list[str]
+        lista de strings
 
     start : int
         índice do início da lista
@@ -25,147 +18,53 @@ def merge_sort(
     Saída:
     ------
 
-        o algoritmo modifica as listas de entrada de forma recursiva
+    None:
+        o algoritmo modifica seus próprios argumentos de forma recursiva
     """
 
-    if end - start > 1:
-        mid = (start + end) // 2
-        merge_sort(first_list, second_list, start, mid)
-        merge_sort(first_list, second_list, mid, end)
-        merge(first_list, second_list, start, mid, end)
+    if start < end:
+        p = partition(current, start, end)
+        quick_sort(current, start, p - 1)
+        quick_sort(current, p + 1, end)
 
 
-def comparisons(
-                current_list: list,
-                left_part: str,
-                right_part: str,
-                index: int,
-                left_index: int,
-                right_index: int) -> dict:
+def partition(current: list, start: int, end: int) -> int:
     """
-    Compara a lista atual de strings com suas partes esquerda e direita
+    Faz o particionamento da lista (divisão) em fragmento menor
+    (dentro da recursividade da chamada) e organiza a posição dos
+    elementos da lista em ordem alfabética
 
     Entradas:
     ---------
 
-    current_list : list[str]
-        lista atual de string a ser comparada
-
-    left_part : list[str]
-        parte esquerda da lista da lista comparada
-
-    right_part : list[str]
-        parte direita da lista da lista comparada
-
-    index: int
-        índice atual da comparação
-
-    left_index: int
-        índice atual da parte esquerda
-
-    right_index: int
-        índice atual da parte direita
-
-    Saída:
-    ------
-
-    dicionário : dict
-
-        "current_list": a lista atual atualizada
-        "left_index": o índice atualizado da parte esquerda da lista
-        "right_index": o índice atualizado da parte direita da lista
-    """
-
-    len_of_left_part = len(left_part)
-    len_of_right_part = len(right_part)
-
-    if left_index >= len_of_left_part:
-        current_list[index] = right_part[right_index]
-        right_index += 1
-
-    elif right_index >= len_of_right_part:
-        current_list[index] = left_part[left_index]
-        left_index += 1
-
-    elif left_part[left_index] < right_part[right_index]:
-        current_list[index] = left_part[left_index]
-        left_index += 1
-
-    else:
-        current_list[index] = right_part[right_index]
-        right_index += 1
-
-    return {
-        "current_list": current_list,
-        "left_index": left_index,
-        "right_index": right_index,
-    }
-
-
-def merge(
-        first_list: list,
-        second_list: list,
-        start: int,
-        mid: int,
-        end: int) -> None:
-    """
-    Faz a mesclagem das listas de string dentro da recursividade do método
-
-    Entradas:
-    ---------
-
-    first_list : list[str]
-        primeira lista de strings
-
-    second_list : list[str]
-        segunda lista de strings
+    current : list[str]
+        a lista de strings
 
     start : int
         índice do início da lista
-
-    mid : int
-        índice do meio da lista
 
     end: int
         índice do fim da lista
 
     Saída:
     ------
-        o algoritmo modifica as listas de entrada de forma recursiva
+
+    d : int
+        o índice do delimitador
 
     """
+    pivot = current[end]
 
-    left_first_list = first_list[start:mid]
-    right_first_list = first_list[mid:end]
+    d = start - 1
 
-    left_second_list = second_list[start:mid]
-    right_second_list = second_list[mid:end]
+    for i in range(start, end):
+        if current[i] <= pivot:
+            d += 1
+            current[i], current[d] = current[d], current[i]
 
-    left_first_list_idx, right_first_list_idx = 0, 0
-    left_second_list_idx, right_second_list_idx = 0, 0
+    current[d + 1], current[end] = current[end], current[d + 1]
 
-    for general_index in range(start, end):
-        first_result = comparisons(
-            first_list,
-            left_first_list,
-            right_first_list,
-            general_index,
-            left_first_list_idx,
-            right_first_list_idx)
-        first_list = first_result["current_list"]
-        left_first_list_idx = first_result["left_index"]
-        right_first_list_idx = first_result["right_index"]
-
-        second_result = comparisons(
-            second_list,
-            left_second_list,
-            right_second_list,
-            general_index,
-            left_second_list_idx,
-            right_second_list_idx)
-        second_list = second_result["current_list"]
-        left_second_list_idx = second_result["left_index"]
-        right_second_list_idx = second_result["right_index"]
+    return d + 1
 
 
 def is_anagram(first_string: str, second_string: str) -> bool:
@@ -195,8 +94,10 @@ def is_anagram(first_string: str, second_string: str) -> bool:
     second_list = list(second_string.lower())
 
     start = 0
-    end = len(first_list)
+    end = len(first_list) - 1
 
-    merge_sort(first_list, second_list, start, end)
+    quick_sort(first_list, start, end)
+
+    quick_sort(second_list, start, end)
 
     return first_list == second_list
